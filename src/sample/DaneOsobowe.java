@@ -29,8 +29,8 @@ public class DaneOsobowe implements HierarchicalController<MainController> {
 
     public void setParentController(MainController parentController) {
         this.parentController = parentController;
-        tabelka.getItems().addAll(parentController.getDataContainer().getStudents());
-        //tabelka.setItems(parentController.getDataContainer().getStudents());
+        //tabelka.getItems().addAll(parentController.getDataContainer().getStudents());
+        tabelka.setItems(parentController.getDataContainer().getStudents());
     }
 
     public void usunZmiany() {
