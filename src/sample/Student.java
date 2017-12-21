@@ -1,9 +1,11 @@
 package sample;
 
+import java.io.Serializable;
+
 /**
  * Created by pwilkin on 30-Nov-17.
  */
-public class Student {
+public class Student implements Serializable {
 
     protected String name;
     protected String surname;
