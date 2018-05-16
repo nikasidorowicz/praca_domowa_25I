@@ -22,13 +22,14 @@
    <right>
       <VBox prefHeight="436.0" prefWidth="172.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="imie" promptText="Imie" />
-            <TextField fx:id="nazwisko" promptText="Nazwisko" />
-            <TextField fx:id="pesel" layoutX="10.0" layoutY="49.0" promptText="PESEL" />
-            <TextField fx:id="indeks" layoutX="10.0" layoutY="49.0" promptText="Nr indeksu" />
-            <Button mnemonicParsing="false" onAction="#dodaj" text="Dodaj" />
-            <Button mnemonicParsing="false" onAction="#zapisz" text="Zapisz" />
-            <Button mnemonicParsing="false" onAction="#wczytaj" text="Wczytaj" />
+                <TextField fx:id="imie" promptText="Imie" />
+                <TextField fx:id="nazwisko" promptText="Nazwisko" />
+                <TextField fx:id="pesel" layoutX="10.0" layoutY="49.0" promptText="PESEL" />
+                <TextField fx:id="indeks" layoutX="10.0" layoutY="49.0" promptText="Nr indeksu" />
+                <Button mnemonicParsing="false" onAction="#dodaj" text="Dodaj" />
+                <Button mnemonicParsing="false" onAction="#zapiszXslx" text="Zapisz" />
+                <Button mnemonicParsing="false" onAction="#wczytaj" text="Wczytaj" />
+             <Button mnemonicParsing="false" onAction="#zapiszPdf" text="ZapiszPDF" />
          </children>
       </VBox>
    </right>

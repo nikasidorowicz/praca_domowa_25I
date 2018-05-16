@@ -1,10 +1,16 @@
 package sample;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -66,7 +72,7 @@ public class DaneOsobowe implements HierarchicalController<MainController> {
 
     }
 
-    public void zapisz(ActionEvent actionEvent) {
+    public void zapiszXslx(ActionEvent actionEvent) {
         XSSFWorkbook wb = new XSSFWorkbook();
         XSSFSheet sheet = wb.createSheet("Studenci");
         int row = 0;
@@ -90,8 +96,56 @@ public class DaneOsobowe implements HierarchicalController<MainController> {
         }
     }
 
-    /** Uwaga na serializację: https://sekurak.pl/java-vs-deserializacja-niezaufanych-danych-i-zdalne-wykonanie-kodu-czesc-i/ */
-    public void wczytaj(ActionEvent actionEvent) {
+    private void addTableHeader(PdfPTable table) {
+        Stream.of("Imię", "nazwisko","Ocena","Opis oceny","Nr Indexu", "PESEL")
+                .forEach(columnTitle -> {
+                    PdfPCell header = new PdfPCell();
+                    header.setBackgroundColor(BaseColor.LIGHT_GRAY);
+                    header.setBorderWidth(2);
+                    header.setPhrase(new Phrase(columnTitle));
+                    table.addCell(header);
+                });
+    }
+
+    private void addRows(PdfPTable table, sample.Student student) {
+
+        table.addCell(student.getName());
+        table.addCell(student.getSurname());
+        if (student.getGrade() != null)
+            table.addCell(student.getGrade().toString());
+        table.addCell(student.getGradeDetailed());
+        table.addCell(student.getIdx());
+        table.addCell(student.getPesel());
+    }
+
+    public void zapiszPdf(ActionEvent actionEvent){
+        try (
+                FileOutputStream kotekSkryba = new FileOutputStream("data.pdf");
+        ) {
+            Document document = new Document();
+            PdfWriter.getInstance(document, kotekSkryba);
+            document.open();
+            PdfPTable table = new PdfPTable(6);
+            addTableHeader(table);
+            Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+            for (sample.Student student : tabelka.getItems()) {
+                addRows(table,student);
+            }
+            document.add(table);
+            document.close();
+
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Jesteś złym kotkiem");
+        }
+    }
+
+        /** Uwaga na serializację: https://sekurak.pl/java-vs-deserializacja-niezaufanych-danych-i-zdalne-wykonanie-kodu-czesc-i/ */
+     public void wczytaj(ActionEvent actionEvent) {
         ArrayList<sample.Student> studentsList = new ArrayList<>();
         try (FileInputStream ois = new FileInputStream("data.xlsx")) {
             XSSFWorkbook wb = new XSSFWorkbook(ois);
@@ -116,4 +170,4 @@ public class DaneOsobowe implements HierarchicalController<MainController> {
             e.printStackTrace();
         }
     }
-}
+    }
